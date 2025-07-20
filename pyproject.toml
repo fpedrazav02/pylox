@@ -1,7 +1,7 @@
 [project]
 name = "pylox"
 version = "0.1.0"
-description = "Add your description here"
+description = "PyLox is a compiler written in Python to compile the Lox language"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = []
