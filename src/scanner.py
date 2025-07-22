@@ -30,16 +30,40 @@ class Scanner:
         self._current += 1
 
         match c:
-            case "\n":
-                self._line += 1
             case "[":
                 self._addToken(TokenType.LEFT_BRACE)
             case "]":
                 self._addToken(TokenType.RIGHT_BRACE)
+            case "(":
+                self._addToken(TokenType.LEFT_PAREN)
+            case ")":
+                self._addToken(TokenType.RIGHT_PAREN)
+            case "{":
+                self._addToken(TokenType.LEFT_BRACE)
+            case "}":
+                self._addToken(TokenType.RIGHT_BRACE)
+            case ",":
+                self._addToken(TokenType.COMMA)
+            case ".":
+                self._addToken(TokenType.DOT)
+            case "-":
+                self._addToken(TokenType.MINUS)
+            case "+":
+                self._addToken(TokenType.PLUS)
+            case ";":
+                self._addToken(TokenType.SEMICOLON)
+            case "*":
+                self._addToken(TokenType.STAR)
+
+            # NOTE: Whitespace handling
+            case " " | "\r" | "\t":
+                pass
+            case "\n":
+                self._line += 1
+
+            # NOTE: Handle any other case
             case _:
-                self._log.lineError(
-                    self._line, UNEXPECTED_CHARACTER_ERROR % str(ord(c))
-                )
+                self._log.lineError(self._line, f"Unexpected character {ord(c)} found.")
 
     @overload
     def _addToken(self, type: TokenType) -> None: ...
