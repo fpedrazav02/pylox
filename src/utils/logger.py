@@ -7,7 +7,7 @@ class PyLoxLogger:
         self._log: Logger = _instanciate_log("PyLox")
 
     def lineError(self, line: int, message: str) -> None:
-        self._log.error("{ Line %s } Error: %s" % str(line), message)
+        self._log.error("{ Line %s } Error: %s" % (line, message))
 
     def info(self, message: str) -> None:
         self._log.info(message)
