@@ -1,5 +1,7 @@
+import token
 from pathlib import Path
 
+from src.scanner import Scanner
 from src.utils.exceptions import (LoxFileNotFound, PyLoxException,
                                   TooManyArguments)
 from src.utils.logger import PyLoxLogger
@@ -73,4 +75,8 @@ class PyLox:
         self._log.error(message)
 
     def _run(self, stream: str):
-        print(stream)
+        # NOTE: Run scanner on the stream
+        scanner: Scanner = Scanner(stream)
+        tokens = scanner.scanTokens()
+        for token in tokens:
+            print(token)
