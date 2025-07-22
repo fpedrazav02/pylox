@@ -54,4 +54,8 @@ class Token:
 
     @override
     def __str__(self) -> str:
-        return "%s %s %s" % (self._tokenType, self._lexeme, self._literal) 
+        return f"Line: {self._line} - Token<Type: {self._tokenType}, Lexeme: {self._lexeme}, Literal: {self._literal}>"
+
+    @override
+    def __repr__(self) -> str:
+        return self.__str__()
