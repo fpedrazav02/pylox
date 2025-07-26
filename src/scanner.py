@@ -54,6 +54,37 @@ class Scanner:
                 self._addToken(TokenType.SEMICOLON)
             case "*":
                 self._addToken(TokenType.STAR)
+            case "!":
+                bangType: TokenType = (
+                    TokenType.BANG_EQUAL if self._match("=") else TokenType.BANG
+                )
+                self._addToken(bangType)
+            case "=":
+                equalType: TokenType = (
+                    TokenType.EQUAL_EQUAL if self._match("=") else TokenType.EQUAL
+                )
+                self._addToken(equalType)
+            case ">":
+                greaterType: TokenType = (
+                    TokenType.GREATER_EQUAL if self._match("=") else TokenType.GREATER
+                )
+                self._addToken(greaterType)
+            case "<":
+                lessType: TokenType = (
+                    TokenType.LESS_EQUAL if self._match("=") else TokenType.LESS
+                )
+                self._addToken(lessType)
+
+            # NOTE: Longer cases
+            case "/":
+                if self._match("/"):
+                    while self._peek() != "\n" and not self.isAtEnd:
+                        self._current += 1
+                else:
+                    self._addToken(TokenType.SLASH)
+            # NOTE: Handle strings
+            case '"':
+                self._string()
 
             # NOTE: Whitespace handling
             case " " | "\r" | "\t":
@@ -79,3 +110,33 @@ class Scanner:
     def isAtEnd(self) -> bool:
         """Return boolean if source has finished"""
         return self._current >= len(self._source)
+
+    def _match(self, expected: str) -> bool:
+        if self.isAtEnd:
+            return False
+        if self._source[self._current] != expected:
+            return False
+
+        self._current += 1
+        return True
+
+    def _peek(self) -> str:
+        if self.isAtEnd:
+            return "\0"
+        return self._source[self._current]
+
+    def _string(self) -> None:
+        while self._peek()!= '"' and not self.isAtEnd:
+            if self._source[self._current] == "\n":
+                self._line += 1
+            self._current += 1
+
+        if self.isAtEnd:
+            self._log.lineError(self._line, "Unterminated string found.")
+            return
+        self._current += 1
+
+        # Add the token removing Quotes
+        self._addToken(
+            TokenType.STRING, self._source[self._start + 1 : self._current - 1]
+        )

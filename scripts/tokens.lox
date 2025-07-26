@@ -1,3 +1,5 @@
+// Script init
+"First string"
 ()
 {}
 ,
@@ -7,3 +9,6 @@
 ;
 *
 []
+!=
+!
+"Last string"
