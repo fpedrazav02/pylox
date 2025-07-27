@@ -1,0 +1,5 @@
+// Define some identifiers
+var example = 1
+var example2 = "hello world"
+
+class Test

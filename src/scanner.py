@@ -1,6 +1,6 @@
-from typing import overload
+from typing import Optional, overload
 
-from src.tokens import Token, TokenType
+from src.tokens import IDENTIFIER_MAP, Token, TokenType
 from src.utils.errors import *
 from src.utils.logger import PyLoxLogger
 
@@ -97,6 +97,9 @@ class Scanner:
                 if c.isdigit():
                     self._number()
                     return
+                if c.isalpha():
+                    self._identifier()
+                    return
                 self._log.lineError(self._line, f"Unexpected character {ord(c)} found.")
 
     @overload
@@ -164,3 +167,24 @@ class Scanner:
             type=TokenType.NUMBER,
             literal=float(self._source[self._start : self._current]),
         )
+
+    def _identifier(self) -> None:
+        while self._isAlphaNumeric():
+            self._current += 1
+
+        text: str = self._source[self._start : self._current]
+        type: TokenType | None = IDENTIFIER_MAP.get(text, None)
+        if type is None:
+            type = TokenType.IDENTIFIER
+        self._addToken(type)
+
+    def _isAlpha(self) -> bool:
+        c: int = ord(self._source[self._current])
+        return (
+            (c >= ord("a") and c <= ord("z"))
+            or (c >= ord("A") and c <= ord("Z"))
+            or (c == ord("_"))
+        )
+
+    def _isAlphaNumeric(self) -> bool:
+        return self._isAlpha() or str.isdigit(self._source[self._current])
