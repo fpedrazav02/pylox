@@ -80,6 +80,26 @@ class Scanner:
                 if self._match("/"):
                     while self._peek() != "\n" and not self.isAtEnd:
                         self._current += 1
+                elif self._match("*"):
+                    cCommentStack: list[int] = [1]
+                    while cCommentStack:
+                        if self.isAtEnd:
+                            self._log.lineError(
+                                self._line, "Unterminated C-style comment."
+                            )
+                            return
+                        if self._peek() == "\n":
+                            self._line += 1
+                        if self._peek() == "/" and self._peekNext() == "*":
+                            cCommentStack.append(1)
+                            self._current += 2
+                            continue
+                        if self._peek() == "*" and self._peekNext() == "/":
+                            _ = cCommentStack.pop()
+                            self._current += 2
+                            continue
+                        self._current += 1
+                    return
                 else:
                     self._addToken(TokenType.SLASH)
             # NOTE: Handle strings

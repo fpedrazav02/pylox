@@ -1,5 +1,7 @@
-// Define some identifiers
-var example = 1
+/* C-TYPE comment 
+
+This is a long long comment
+
+*/
 var example2 = "hello world"
 
-class Test
