@@ -94,6 +94,9 @@ class Scanner:
 
             # NOTE: Handle any other case
             case _:
+                if c.isdigit():
+                    self._number()
+                    return
                 self._log.lineError(self._line, f"Unexpected character {ord(c)} found.")
 
     @overload
@@ -125,8 +128,14 @@ class Scanner:
             return "\0"
         return self._source[self._current]
 
+    def _peekNext(self) -> str:
+        if self._current + 1 > len(self._source):
+            return "\0"
+        nextPeek: int = self._current + 1
+        return self._source[nextPeek]
+
     def _string(self) -> None:
-        while self._peek()!= '"' and not self.isAtEnd:
+        while self._peek() != '"' and not self.isAtEnd:
             if self._source[self._current] == "\n":
                 self._line += 1
             self._current += 1
@@ -139,4 +148,19 @@ class Scanner:
         # Add the token removing Quotes
         self._addToken(
             TokenType.STRING, self._source[self._start + 1 : self._current - 1]
+        )
+
+    def _number(self) -> None:
+        while not self.isAtEnd and str.isdigit(self._source[self._current]):
+            self._current += 1
+
+        if self._peek() == "." and str.isdigit(self._peekNext()):
+            self._current += 1
+
+            while not self.isAtEnd and str.isdigit(self._source[self._current]):
+                self._current += 1
+
+        self._addToken(
+            type=TokenType.NUMBER,
+            literal=float(self._source[self._start : self._current]),
         )

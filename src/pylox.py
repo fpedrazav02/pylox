@@ -1,4 +1,3 @@
-import token
 from pathlib import Path
 
 from src.scanner import Scanner

@@ -1,5 +1,6 @@
 // Script init
 "First string"
+99999.99
 ()
 {}
 ,
@@ -11,4 +12,5 @@
 []
 !=
 !
+10
 "Last string"
