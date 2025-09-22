@@ -9,5 +9,5 @@ if __name__ == "__main__":
         pylox = PyLox()
         pylox(args[1::])
     except Exception as e:
-        print("Error happened while trying to run pylox:")
+        print(f"Error happened while trying to run pylox: {str(e)}")
         traceback.print_exc()

@@ -1,4 +1,4 @@
-from typing import Optional, overload
+from typing import overload
 
 from src.tokens import IDENTIFIER_MAP, Token, TokenType
 from src.utils.errors import *
